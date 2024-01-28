@@ -5,6 +5,7 @@ services:
     build: 
       context: .
       dockerfile: Dockerfile
+    image: zihuiliang/judgenode:latest
     ports:
       - "8080:8080"
     storage_opt:

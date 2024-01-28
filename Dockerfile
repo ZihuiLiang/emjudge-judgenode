@@ -111,13 +111,10 @@ RUN sudo -lU $(whoami)
 RUN apt-get clean \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-
-
-
-
 COPY config config
 COPY src src
 COPY Cargo.toml Cargo.toml
 
+RUN cargo build --release
 
-RUN cargo run --release
+CMD ["target/release/emjudge-judgenode"]

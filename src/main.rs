@@ -12,6 +12,7 @@ async fn main() -> std::io::Result<()> {
             return Ok(());
         }
     };
+    println!("settings: {:?}", settings);
     let url = settings.url.clone();
     let port = settings.port.clone();
     let workers = settings.actix_workers.clone();

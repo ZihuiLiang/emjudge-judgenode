@@ -1,90 +1,123 @@
-FROM ubuntu:20.04 as base
+FROM ubuntu:20.04
 
 WORKDIR /usr/src/emjudge-judgenode
 
-RUN apt-get update && apt-get install -y \
+ENV DEBIAN_FRONTEND=noninteractive
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
-    cmake \
-    libseccomp-dev \
-    libseccomp2 \
     libssl-dev \
-    snapd \
-    curl \
-    make \
-    pkg-config \
-    python3 \
-    python2 \
-    g++ \
-    gcc \ 
-    default-jdk \
-    pypy3 \
-    ruby \
-    perl \
-    mono-complete \
-    golang \
-    nodejs \
-    npm \
-    gfortran \
-    lua \
-    php \
-    gnu-smalltalk \
-    ocaml \
-    open-cobol \
-    gnat \
-    sbcl \
-    scala \
-    tcl \
-    tcllib \
-    octave \
-
-    && rm -rf /var/lib/apt/lists/*
-
-RUN ln -s /usr/bin/nodejs /usr/bin/node
-
-RUN snap install kotlin --classic
-
-RUN snap install --classic swift
-
-RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
-
-RUN curl -fsSL https://install.julialang.org | sh -s -- -y
-
-ENV PATH="${HOME}/.cargo/bin:${PATH}"
-
-ENV PATH="${HOME}/.juliaup/bin:${PATH}"
+    curl
 
 RUN g++ --version
 RUN gcc --version
-RUN java -version
+
+RUN apt-get install -y --no-install-recommends \
+    python3-minimal \
+    python2-minimal \
+    pypy3 \
+    pypy
+
 RUN python3 --version
 RUN pypy3 --version
 RUN python2 --version
-RUN ruby --version
-RUN perl -v
-RUN mono --version
-RUN swift --version
-RUN go version
-RUN node --version
-RUN rustc --version
-RUN kotlin -version
-RUN julia --version
-RUN gfortran --version
-RUN lua -v
-RUN php --version
-RUN gst --version
-RUN ocaml -version
-RUN cobc --version
-RUN gnat --version
-RUN sbcl --version
-RUN scala -version
-RUN echo 'puts [info patchlevel]' | tclsh
-RUN octave --version
 RUN pypy --version
 
+RUN apt-get install -y --no-install-recommends default-jdk
+
+RUN java -version
+
+RUN apt-get install -y --no-install-recommends ruby
+RUN ruby --version
+
+RUN apt-get install -y --no-install-recommends perl
+
+RUN perl -v
+
+RUN apt-get install -y --no-install-recommends mono-runtime
+
+RUN mono --version
+
+RUN apt-get install -y --no-install-recommends golang-go
+
+RUN go version
+
+RUN apt-get install -y --no-install-recommends nodejs
+    
+RUN node --version
+
+RUN apt-get install -y --no-install-recommends gfortran
+
+RUN gfortran --version
+
+RUN apt-get install -y --no-install-recommends lua5.3
+
+RUN lua -v
+
+RUN apt-get install -y --no-install-recommends php
+
+RUN php --version
+
+RUN apt-get install -y --no-install-recommends gnu-smalltalk
+
+RUN gst --version
+
+RUN apt-get install -y --no-install-recommends ocaml
+
+RUN ocaml -version
+
+RUN apt-get install -y --no-install-recommends open-cobol
+
+RUN cobc --version
+
+RUN apt-get install -y --no-install-recommends gnat
+
+RUN gnat --version
+
+RUN apt-get install -y --no-install-recommends sbcl
+
+RUN sbcl --version
+
+RUN apt-get install -y --no-install-recommends scala
+
+RUN scala -version
+
+RUN apt-get install -y --no-install-recommends tcl
+
+RUN echo 'puts [info patchlevel]' | tclsh
+
+RUN apt-get install -y --no-install-recommends octave
+
+RUN octave --version
+
+RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+
+ENV PATH="/root/.cargo/bin:${PATH}"
+
+RUN rustc --version
+
+RUN curl -fsSL https://install.julialang.org | sh -s -- -y
+
+ENV PATH="/root/.juliaup/bin:${PATH}"
+
+RUN julia --version
+
+RUN apt-get install -y --no-install-recommends libcgroup-dev pkg-config libsqlite3-dev
+
+RUN apt-get install -y --no-install-recommends sudo
+
+RUN sudo -lU $(whoami)
+
+RUN apt-get clean \
+    && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 
 
 
-COPY . .
+
+COPY config config
+COPY src src
+COPY Cargo.toml Cargo.toml
+
 
 RUN cargo run --release

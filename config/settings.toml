@@ -1,4 +1,4 @@
-url = "localhost"
+url = "0.0.0.0"
 port = "8080"
 test_threads = 1
 actix_workers = 1
@@ -42,13 +42,13 @@ exe_command = """
 compile_command = """
 go build -o main main.go"""
 
-[compile_and_exe.languages.Swift]
-exe_command = """
-./main"""
-exe_files = ["main"]
-raw_code = "main.swift"
-compile_command = """
-swiftc main.swift -o main"""
+#[compile_and_exe.languages.Swift]
+#exe_command = """
+#./main"""
+#exe_files = ["main"]
+#raw_code = "main.swift"
+#compile_command = """
+#swiftc main.swift -o main"""
 
 [compile_and_exe.languages.Ruby]
 exe_command = """
@@ -178,10 +178,10 @@ raw_code = "main.adb"
 exe_command = """
 ./main"""
 
-[compile_and_exe.languages.Kotlin]
-raw_code = "Main.kt"
-exe_files = ["Main.jar"]
-compile_command = """
-kotlinc Main.kt -include-runtime -d Main.jar"""
-exe_command = """
-kotlin Main.jar"""
+#[compile_and_exe.languages.Kotlin]
+#raw_code = "Main.kt"
+#exe_files = ["Main.jar"]
+#compile_command = """
+#kotlinc Main.kt -include-runtime -d Main.jar"""
+#exe_command = """
+#kotlin Main.jar"""

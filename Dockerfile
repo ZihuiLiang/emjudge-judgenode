@@ -1,7 +1,5 @@
 FROM ubuntu:22.04
 
-WORKDIR /usr/src/emjudge-judgenode
-
 ENV DEBIAN_FRONTEND=noninteractive
 
 RUN apt update && apt install linux-generic-hwe-22.04 -y 
@@ -14,10 +12,44 @@ RUN current_kernel=$(uname -r) \
         exit 1; \
     fi
 
+RUN apt autoremove
+
+
+RUN apt-get update && \
+    apt-get install -y build-essential autoconf automake libtool wget byacc flex libpam-dev libsystemd-dev && \
+    rm -rf /var/lib/apt/lists/*
+
+
+WORKDIR /tmp
+RUN wget https://github.com/libcgroup/libcgroup/releases/download/v3.1.0/libcgroup-3.1.0.tar.gz && \
+    tar -xzvf libcgroup-3.1.0.tar.gz && \
+    rm libcgroup-3.1.0.tar.gz
+
+WORKDIR /tmp/libcgroup-3.1.0
+RUN ./configure && \
+    make && \
+    make install
+
+WORKDIR /
+RUN rm -rf /tmp/libcgroup-3.1.0
+
+RUN ldconfig
+
+
+RUN apt-get remove -y autoconf automake libtool  byacc flex libpam-dev libsystemd-dev && \
+    apt-get autoremove -y && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+WORKDIR /usr/src/emjudge-judgenode
+
+
+
+
 RUN apt update && apt install -y --no-install-recommends \
-    build-essential \
     libssl-dev \
     curl
+    
 
 RUN g++ --version
 RUN gcc --version

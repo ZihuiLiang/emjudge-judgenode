@@ -1,4 +1,4 @@
-FROM ubuntu:20.04
+FROM ubuntu:22.04
 
 WORKDIR /usr/src/emjudge-judgenode
 
@@ -34,9 +34,9 @@ RUN apt-get install -y --no-install-recommends perl
 
 RUN perl -v
 
-RUN apt-get install -y --no-install-recommends mono-runtime
+RUN apt-get install -y --no-install-recommends mono-mcs
 
-RUN mono --version
+RUN mcs --version
 
 RUN apt-get install -y --no-install-recommends golang-go
 
@@ -66,7 +66,7 @@ RUN apt-get install -y --no-install-recommends ocaml
 
 RUN ocaml -version
 
-RUN apt-get install -y --no-install-recommends open-cobol
+RUN apt-get install -y --no-install-recommends gnucobol
 
 RUN cobc --version
 
@@ -96,9 +96,7 @@ ENV PATH="/root/.cargo/bin:${PATH}"
 
 RUN rustc --version
 
-RUN curl -fsSL https://install.julialang.org | sh -s -- -y
-
-ENV PATH="/root/.juliaup/bin:${PATH}"
+RUN apt-get install -y --no-install-recommends julia
 
 RUN julia --version
 

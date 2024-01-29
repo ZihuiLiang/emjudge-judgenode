@@ -96,15 +96,11 @@ ENV PATH="/root/.cargo/bin:${PATH}"
 
 RUN rustc --version
 
-RUN apt-get install -y --no-install-recommends julia
+RUN cargo install juliaup
 
 RUN julia --version
 
 RUN apt-get install -y --no-install-recommends libcgroup-dev pkg-config libsqlite3-dev
-
-RUN apt-get install -y --no-install-recommends sudo
-
-RUN sudo -lU $(whoami)
 
 RUN apt-get clean \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*

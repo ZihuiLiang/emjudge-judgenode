@@ -1,7 +1,7 @@
 use std::io::Read;
 
 use emjudge_judgecore::quantity::{MemorySize, TimeSpan};
-use emjudge_judgenode::{db::TestData, service::tests::{RunAndEvalResponse, TestRequest}, settings::Settings};
+use emjudge_judgenode::{data::TestData,requests::TestRequest, responses::RunAndEvalResponse, settings::Settings};
 use reqwest::{header::{HeaderMap, HeaderValue}, Error};
 
 #[tokio::test]
@@ -35,7 +35,7 @@ async fn aplusb() -> Result<(), Error> {
         .await
         .unwrap();
     assert_eq!(response.status().as_u16(), 200);    
-    assert_eq!(response.text().await.unwrap(), serde_json::to_string(&emjudge_judgenode::service::test_data::SubmitResult::Ok).unwrap());
+    assert_eq!(response.text().await.unwrap(), serde_json::to_string(&emjudge_judgenode::responses::SubmitResponse::Ok).unwrap());
     let url = format!("http://{}:{}/test/run_and_eval", settings.url, settings.port);
     let url = url.as_str();
     let test_request = TestRequest {

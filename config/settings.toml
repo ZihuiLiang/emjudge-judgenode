@@ -21,6 +21,7 @@ compile_command = """
 cobc -free -x main.cob -o main"""
 exe_command = """
 ./main"""
+language_info_command = "cobc --version"
 
 [compile_and_exe.languages.Scala]
 exe_files = ["Main.class", "Main$.class"]
@@ -29,10 +30,12 @@ scalac -d . Main.scala"""
 exe_command = """
 scala -J-Xmx4g -J-Xss256m Main"""
 raw_code = "Main.scala"
+language_info_command = "scala -version"
 
 [compile_and_exe.languages.Javascript]
 exe_files = ["main.js"]
 exe_command = "node main.js"
+language_info_command = "node --version"
 
 [compile_and_exe.languages.Go]
 exe_files = ["main"]
@@ -41,6 +44,7 @@ exe_command = """
 ./main"""
 compile_command = """
 go build -o main main.go"""
+language_info_command = "go version"
 
 #[compile_and_exe.languages.Swift]
 #exe_command = """
@@ -54,6 +58,7 @@ go build -o main main.go"""
 exe_command = """
 ruby main.rb"""
 exe_files = ["main.rb"]
+language_info_command = "ruby --version"
 
 [compile_and_exe.languages.OCaml]
 raw_code = "main.ml"
@@ -62,6 +67,7 @@ ocamlc main.ml -o main"""
 exe_files = ["main"]
 exe_command = """
 ./main"""
+language_info_command = "ocaml -version"
 
 [compile_and_exe.languages.Rust]
 raw_code = "main.rs"
@@ -70,16 +76,19 @@ exe_command = """
 ./main"""
 compile_command = """
 rustc main.rs -o main"""
+language_info_command = "rustc --version"
 
 [compile_and_exe.languages.Julia]
 exe_command = """
 julia --startup-file=no main.jl"""
 exe_files = ["main.jl"]
+language_info_command = "julia --version"
 
 [compile_and_exe.languages.Smalltalk]
 exe_command = """
 gst main.st"""
 exe_files = ["main.st"]
+language_info_command = "gst --version"
 
 [compile_and_exe.languages."C#"]
 exe_command = """
@@ -88,11 +97,13 @@ raw_code = "main.cs"
 exe_files = ["main"]
 compile_command = """
 mcs -out:main main.cs"""
+language_info_command = "mcs --version"
 
 [compile_and_exe.languages.PHP]
 exe_files = ["main.php"]
 exe_command = """
 php main.php"""
+language_info_command = "php --version"
 
 [compile_and_exe.languages.Java]
 exe_files = ["Main.class"]
@@ -101,6 +112,7 @@ javac Main.java"""
 exe_command = """
 java -Xmx4g -Xss256m Main"""
 raw_code = "Main.java"
+language_info_command = "java -version"
 
 [compile_and_exe.languages."C++"]
 exe_command = """./main"""
@@ -108,26 +120,32 @@ exe_files = ["main"]
 compile_command = """
 g++ main.cpp -o main -static -O2 -lm -w -Wno-unused-result -std=c++2a"""
 raw_code = "main.cpp"
+language_info_command = "g++ --version"
 
 [compile_and_exe.languages.Tcl]
 exe_files = ["main.tcl"]
 exe_command = """
 ./main.tcl"""
+language_info_command = """echo 'puts [info patchlevel]' | tclsh"""
 
 [compile_and_exe.languages."Pypy 2"]
 exe_command = """
-pypy2 main.py2"""
+pypy main.py2"""
 exe_files = ["main.py2"]
+language_info_command = "pypy --version"
+
 
 [compile_and_exe.languages.Lua]
 exe_files = ["main.lua"]
 exe_command = """
 lua main.lua"""
+language_info_command = "lua -v"
 
 [compile_and_exe.languages."Common LISP"]
 exe_files = ["main.lisp"]
 exe_command = """
 sbcl --script main.lisp"""
+language_info_command = "sbcl --version"
 
 [compile_and_exe.languages.C]
 compile_command = """
@@ -136,21 +154,25 @@ exe_command = """
 ./main"""
 raw_code = "main.c"
 exe_files = ["main"]
+language_info_command = "gcc --version"
 
 [compile_and_exe.languages."Python 2"]
 exe_command = """
 python2 main.py2"""
 exe_files = ["main.py2"]
+language_info_command = "python2 --version"
 
 [compile_and_exe.languages.Octave]
 exe_command = """
 octave --no-gui --no-window-system main.m"""
 exe_files = ["main.m"]
+language_info_command = "octave --version"
 
 [compile_and_exe.languages."Python 3"]
 exe_files = ["main.py3"]
 exe_command = """
 python3 main.py3"""
+language_info_command = "python3 --version"
 
 [compile_and_exe.languages.Fortran]
 compile_command = """
@@ -159,16 +181,19 @@ exe_files = ["main"]
 exe_command = """
 ./main"""
 raw_code = "main.f90"
+language_info_command = "gfortran --version"
 
 [compile_and_exe.languages.Perl]
 exe_command = """
 ./main.pl"""
 exe_files = ["main.pl"]
+language_info_command = "perl -v"
 
 [compile_and_exe.languages."Pypy 3"]
 exe_files = ["main.py3"]
 exe_command = """
 pypy3 main.py3"""
+language_info_command = "pypy3 --version"
 
 [compile_and_exe.languages.Ada]
 compile_command = """
@@ -177,6 +202,7 @@ exe_files = ["main"]
 raw_code = "main.adb"
 exe_command = """
 ./main"""
+language_info_command = "gnat --version"
 
 #[compile_and_exe.languages.Kotlin]
 #raw_code = "Main.kt"

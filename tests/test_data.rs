@@ -1,5 +1,5 @@
 use emjudge_judgecore::quantity::{MemorySize, TimeSpan};
-use emjudge_judgenode::{db::TestData, settings::Settings};
+use emjudge_judgenode::{data::TestData, settings::Settings};
 use reqwest::{header::{HeaderMap, HeaderValue}, Error};
 
 #[tokio::test]
@@ -29,7 +29,7 @@ async fn test_data_submit() -> Result<(), Error> {
         .await
         .unwrap();
     assert_eq!(response.status().as_u16(), 200);    
-    assert_eq!(response.text().await.unwrap(), serde_json::to_string(&emjudge_judgenode::service::test_data::SubmitResult::InputLengthNotMatchOutputLength).unwrap());
+    assert_eq!(response.text().await.unwrap(), serde_json::to_string(&emjudge_judgenode::responses::SubmitResponse::InputLengthNotMatchOutputLength).unwrap());
     let test_data = TestData {
         id: String::from("4"),
         input: vec![],
@@ -49,7 +49,7 @@ async fn test_data_submit() -> Result<(), Error> {
         .await
         .unwrap();
     assert_eq!(response.status().as_u16(), 200);    
-    assert_eq!(response.text().await.unwrap(), serde_json::to_string(&emjudge_judgenode::service::test_data::SubmitResult::MaximumTimeLimitExceeded(settings.max_time_limit)).unwrap());
+    assert_eq!(response.text().await.unwrap(), serde_json::to_string(&emjudge_judgenode::responses::SubmitResponse::MaximumTimeLimitExceeded(settings.max_time_limit)).unwrap());
     let test_data = TestData {
         id: String::from("4"),
         input: vec![],
@@ -69,7 +69,7 @@ async fn test_data_submit() -> Result<(), Error> {
         .await
         .unwrap();
     assert_eq!(response.status().as_u16(), 200);    
-    assert_eq!(response.text().await.unwrap(), serde_json::to_string(&emjudge_judgenode::service::test_data::SubmitResult::MaximumTimeLimitExceeded(settings.max_time_limit)).unwrap());
+    assert_eq!(response.text().await.unwrap(), serde_json::to_string(&emjudge_judgenode::responses::SubmitResponse::MaximumTimeLimitExceeded(settings.max_time_limit)).unwrap());
     let test_data = TestData {
         id: String::from("4"),
         input: vec![],
@@ -89,7 +89,7 @@ async fn test_data_submit() -> Result<(), Error> {
         .await
         .unwrap();
     assert_eq!(response.status().as_u16(), 200);
-    assert_eq!(response.text().await.unwrap(), serde_json::to_string(&emjudge_judgenode::service::test_data::SubmitResult::MaximumMemoryLimitExceeded(settings.max_memory_limit)).unwrap());
+    assert_eq!(response.text().await.unwrap(), serde_json::to_string(&emjudge_judgenode::responses::SubmitResponse::MaximumMemoryLimitExceeded(settings.max_memory_limit)).unwrap());
     let test_data = TestData {
         id: String::from("4"),
         input: vec![],
@@ -109,7 +109,7 @@ async fn test_data_submit() -> Result<(), Error> {
         .await
         .unwrap();
     assert_eq!(response.status().as_u16(), 200);
-    assert_eq!(response.text().await.unwrap(), serde_json::to_string(&emjudge_judgenode::service::test_data::SubmitResult::MaximumMemoryLimitExceeded(settings.max_memory_limit)).unwrap());
+    assert_eq!(response.text().await.unwrap(), serde_json::to_string(&emjudge_judgenode::responses::SubmitResponse::MaximumMemoryLimitExceeded(settings.max_memory_limit)).unwrap());
     let test_data = TestData {
         id: String::from("4"),
         input: vec![vec![0]],
@@ -130,7 +130,7 @@ async fn test_data_submit() -> Result<(), Error> {
         .await
         .unwrap();
     assert_eq!(response.status().as_u16(), 200);
-    assert_eq!(response.text().await.unwrap(), serde_json::to_string(&emjudge_judgenode::service::test_data::SubmitResult::MaximumPerTestDataLimitExceeded(settings.max_per_test_data_limit)).unwrap());
+    assert_eq!(response.text().await.unwrap(), serde_json::to_string(&emjudge_judgenode::responses::SubmitResponse::MaximumPerTestDataLimitExceeded(settings.max_per_test_data_limit)).unwrap());
     let test_data = TestData {
         id: String::from("4"),
         input: vec![vec![0]; settings.max_per_test_data_limit.as_bytes() as usize / 2 + 1],
@@ -150,7 +150,7 @@ async fn test_data_submit() -> Result<(), Error> {
         .await
         .unwrap();
     assert_eq!(response.status().as_u16(), 200);
-    assert_eq!(response.text().await.unwrap(), serde_json::to_string(&emjudge_judgenode::service::test_data::SubmitResult::MaximumPerTestDataLimitExceeded(settings.max_per_test_data_limit)).unwrap());
+    assert_eq!(response.text().await.unwrap(), serde_json::to_string(&emjudge_judgenode::responses::SubmitResponse::MaximumPerTestDataLimitExceeded(settings.max_per_test_data_limit)).unwrap());
     let test_data = TestData {
         id: String::from("4"),
         input: vec![vec![0;settings.max_per_test_data_limit.as_bytes() as usize]],
@@ -170,7 +170,7 @@ async fn test_data_submit() -> Result<(), Error> {
         .await
         .unwrap();
     assert_eq!(response.status().as_u16(), 200);
-    assert_eq!(response.text().await.unwrap(), serde_json::to_string(&emjudge_judgenode::service::test_data::SubmitResult::MaximumEvalOrInteractorCodeLimitExceeded(settings.max_code_limit)).unwrap());
+    assert_eq!(response.text().await.unwrap(), serde_json::to_string(&emjudge_judgenode::responses::SubmitResponse::MaximumEvalOrInteractorCodeLimitExceeded(settings.max_code_limit)).unwrap());
     let test_data = TestData {
         id: String::from("4"),
         input: vec![vec![0;settings.max_per_test_data_limit.as_bytes() as usize]],
@@ -190,7 +190,7 @@ async fn test_data_submit() -> Result<(), Error> {
         .await
         .unwrap();
     assert_eq!(response.status().as_u16(), 200);
-    assert_eq!(response.text().await.unwrap(), serde_json::to_string(&emjudge_judgenode::service::test_data::SubmitResult::NoSuchLanguageForEvalOrInteractor).unwrap());
+    assert_eq!(response.text().await.unwrap(), serde_json::to_string(&emjudge_judgenode::responses::SubmitResponse::NoSuchLanguageForEvalOrInteractor).unwrap());
     let test_data = TestData {
         id: String::from("4"),
         input: vec![vec![0;settings.max_per_test_data_limit.as_bytes() as usize]],
@@ -210,6 +210,6 @@ async fn test_data_submit() -> Result<(), Error> {
         .await
         .unwrap();
     assert_eq!(response.status().as_u16(), 200);
-    assert_eq!(response.text().await.unwrap(), serde_json::to_string(&emjudge_judgenode::service::test_data::SubmitResult::Ok).unwrap());
+    assert_eq!(response.text().await.unwrap(), serde_json::to_string(&emjudge_judgenode::responses::SubmitResponse::Ok).unwrap());
     Ok(())
 }   

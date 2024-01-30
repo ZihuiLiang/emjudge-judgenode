@@ -1,5 +1,5 @@
 use actix_web::{middleware::Logger, web, App, HttpServer};
-use emjudge_judgenode::{service::{auth::{is_authed, Authentication}, tests, test_data}, settings::Settings};
+use emjudge_judgenode::{service::{auth::{is_authed, Authentication}, info, test_data, tests}, settings::Settings};
 use env_logger::Env;
 
 #[actix_web::main]
@@ -26,6 +26,7 @@ async fn main() -> std::io::Result<()> {
             .service(is_authed)
             .service(web::scope("/test").service(tests::only_run).service(tests::run_and_eval).service(tests::ans_and_eval).service(tests::run_and_interact))
             .service(web::scope("/test_data").service(test_data::submit))
+            .service(web::scope("/info").service(info::all).service(info::disk).service(info::cpu).service(info::mem).service(info::sys).service(info::language).service(info::languages))
     })
     .bind((url, port))?
     .workers(workers)

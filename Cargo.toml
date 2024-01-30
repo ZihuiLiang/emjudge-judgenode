@@ -6,16 +6,17 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-actix-service = "2.0.2"
-actix-web = "4.4.1"
-config = "0.13.4"
-emjudge-judgecore = "0.1.7"
-env_logger = "0.11.0"
-futures = "0.3.30"
-rusqlite = "0.30.0"
+actix-service = { version = "2.0.2", optional = true}
+actix-web = { version = "4.4.1", optional = true}
+config = { version = "0.13.4", optional = true}
+emjudge-judgecore = { version = "0.1.10", optional = true}
+env_logger = { version = "0.11.0", optional = true}
+futures = { version = "0.3.30", optional = true}
+rusqlite = { version = "0.30.0", optional = true}
 serde = "1.0.194"
 serde_with = "3.4.0"
-tokio = "1.35.1"
+sys-info = "0.9.1"
+tokio = { version = "1.35.1", optional = true}
 
 
 [dev-dependencies]
@@ -23,4 +24,9 @@ reqwest = { version = "0.11.23", features = ["json"] }
 serde_json = "1.0.111"
 
 [features]
-full = []
+data_ds = ["emjudge-judgecore/quantity"]
+request_ds = []
+response_ds = ["emjudge-judgecore/result"]
+service = ["data_ds", "request_ds", "response_ds", "emjudge-judgecore/full_v2", "actix-service", "actix-web", "config", "env_logger", "futures", "rusqlite", "tokio"]
+default = ["data_ds", "request_ds", "response_ds"]
+full = ["service"]

@@ -1,19 +1,6 @@
-FROM ubuntu:22.04
+FROM ubuntu:20.04
 
 ENV DEBIAN_FRONTEND=noninteractive
-
-RUN apt update && apt install linux-generic-hwe-22.04 -y 
-
-
-RUN current_kernel=$(uname -r) \
-    && target_kernel="5.19" \
-    && if [[ "$(echo -e "$current_kernel\n$target_kernel" | sort -V | tail -n 1)" != "$current_kernel" ]]; then \
-        echo "Error: Current kernel version $current_kernel does not meet the requirement (less than $target_kernel)" >&2; \
-        exit 1; \
-    fi
-
-RUN apt autoremove
-
 
 RUN apt-get update && \
     apt-get install -y build-essential autoconf automake libtool wget byacc flex libpam-dev libsystemd-dev && \
@@ -40,11 +27,6 @@ RUN apt-get remove -y autoconf automake libtool  byacc flex libpam-dev libsystem
     apt-get autoremove -y && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
-
-WORKDIR /usr/src/emjudge-judgenode
-
-
-
 
 RUN apt update && apt install -y --no-install-recommends \
     libssl-dev \
@@ -138,7 +120,7 @@ ENV PATH="/root/.cargo/bin:${PATH}"
 
 RUN rustc --version
 
-RUN cargo install juliaup
+RUN apt install -y --no-install-recommends julia
 
 RUN julia --version
 
@@ -146,6 +128,8 @@ RUN apt install -y --no-install-recommends libcgroup-dev pkg-config libsqlite3-d
 
 RUN apt clean \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
+WORKDIR /usr/src/emjudge-judgenode
 
 COPY config config
 COPY src src

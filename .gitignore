@@ -1,0 +1,17 @@
+/target
+Cargo.lock
+guide/build/
+/gh-pages
+
+*.so
+*.out
+*.pyc
+*.pid
+*.sock
+*~
+
+.DS_Store
+.vscode
+.idea
+**/*.rs.bk
+test_data_db.sqlite3

@@ -16,8 +16,8 @@ async fn hello_world() -> Result<(), Error> {
     std::fs::File::open("tests/programs/helloworld/main.cpp").unwrap().read_to_end(&mut tested_code).unwrap();
     let test_data = TestData {
         id: String::from("0"),
-        input: vec![vec![];100],
-        output: vec![vec![];100],
+        input: vec![vec![];1000],
+        output: vec![vec![];1000],
         time_limit: settings.max_time_limit,
         memory_limit: settings.max_memory_limit,
         eval_or_interactor_code: vec![],
@@ -50,7 +50,7 @@ async fn hello_world() -> Result<(), Error> {
         .unwrap();
     assert_eq!(response.status().as_u16(), 200);
     let result: Vec<OnlyRunResponse> = serde_json::from_str(&response.text().await.unwrap()).unwrap();
-    assert_eq!(result.len(), 100);
+    assert_eq!(result.len(), 1000);
     for i in result {
         match i {
             OnlyRunResponse::Ok(result) => {

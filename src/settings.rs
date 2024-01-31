@@ -1,4 +1,4 @@
-use std::sync::Arc;
+use std::sync::{Arc, RwLock};
 
 use config::Config;
 use emjudge_judgecore::{quantity::{MemorySize, TimeSpan}, settings::{create_a_tmp_user_return_uid, CompileAndExeSettings}};
@@ -50,7 +50,9 @@ pub struct Settings {
     #[serde(skip, default = "Settings::acquire_for_test_thread_default")]
     pub acquire_for_test_thread: Arc<Semaphore>,
     #[serde(skip, default = "Settings::test_db_default")]
-    pub test_db: TestDB
+    pub test_db: TestDB,
+    #[serde(skip, default = "Settings::test_pressure_default")]
+    test_pressure: Arc<RwLock<TimeSpan>>
 }
 
 impl Settings {
@@ -114,6 +116,9 @@ impl Settings {
     fn test_db_default() -> TestDB {
         TestDB {path: Self::test_data_db_path_default(), max_db_limit: Self::max_db_limit_default()}
     }
+    fn test_pressure_default() -> Arc<RwLock<TimeSpan>> {
+        Arc::new(RwLock::new(TimeSpan::from_seconds(0)))
+    }
 }
 
 impl Settings {
@@ -135,7 +140,19 @@ impl Settings {
             Err(result) => Err(result.to_string()),
         }
     }
+
+    pub fn add_test_pressure(&self, time: TimeSpan) {
+        let mut test_pressure = self.test_pressure.write().unwrap();
+        *test_pressure = *test_pressure + time;
+    }
+
+    pub fn sub_test_pressure(&self, time: TimeSpan) {
+        let mut test_pressure = self.test_pressure.write().unwrap();
+        *test_pressure = *test_pressure - time;
+    }
+
+    pub fn get_test_pressure(&self) -> TimeSpan {
+        let test_pressure = self.test_pressure.read().unwrap();
+        *test_pressure
+    }
 }
-
-
-

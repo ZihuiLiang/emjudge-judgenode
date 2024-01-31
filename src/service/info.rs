@@ -1,6 +1,6 @@
 use actix_web::{get, post, web, HttpResponse};
 
-use crate::{requests::LanguageRequest, responses::{AllInfo, AllInfoResponse, CpuInfo, CpuInfoResponse, DiskInfo, DiskInfoResponse, LanguageInfo, LanguageInfoResponse, LanguagesInfo, LanguagesInfoResponse, MemInfo, MemInfoResponse, SysInfo, SysInfoResponse}, settings::Settings};
+use crate::{requests::LanguageRequest, responses::{AllInfo, AllInfoResponse, CpuInfo, CpuInfoResponse, DiskInfo, DiskInfoResponse, LanguageInfo, LanguageInfoResponse, LanguagesInfo, LanguagesInfoResponse, MemInfo, MemInfoResponse, SysInfo, SysInfoResponse, TestPressureResponse}, settings::Settings};
 
 
 
@@ -45,4 +45,10 @@ pub async fn languages(settings: web::Data<Settings>) -> HttpResponse {
 pub async fn language(settings: web::Data<Settings>, req: web::Json<LanguageRequest>) -> HttpResponse {
     let language_info_response = LanguageInfoResponse::from(LanguageInfo::new(&req.language, &settings.compile_and_exe));
     HttpResponse::Ok().json(language_info_response)
+}
+
+#[get("/test_pressure")]
+pub async fn test_pressure(settings: web::Data<Settings>) -> HttpResponse {
+    let test_pressure_response = TestPressureResponse::Ok(settings.get_test_pressure());
+    HttpResponse::Ok().json(test_pressure_response)
 }

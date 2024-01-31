@@ -411,3 +411,7 @@ impl From<LanguagesInfo> for LanguagesInfoResponse {
     }
 }
 
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub enum TestPressureResponse {
+    Ok(TimeSpan),
+}

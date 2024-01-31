@@ -16,7 +16,8 @@ async fn main() -> std::io::Result<()> {
     let url = settings.url.clone();
     let port = settings.port.clone();
     let workers = settings.actix_workers.clone();
-    let max_json_limit = settings.max_json_limit.clone().as_bytes() as usize;
+    let max_json_limit = settings.max_json_limit.clone().as_bytes() as usize;  
+    
     HttpServer::new(move ||  {
         App::new()
             .app_data(web::JsonConfig::default().limit(max_json_limit))
@@ -26,7 +27,7 @@ async fn main() -> std::io::Result<()> {
             .service(is_authed)
             .service(web::scope("/test").service(tests::only_run).service(tests::run_and_eval).service(tests::ans_and_eval).service(tests::run_and_interact))
             .service(web::scope("/test_data").service(test_data::submit))
-            .service(web::scope("/info").service(info::all).service(info::disk).service(info::cpu).service(info::mem).service(info::sys).service(info::language).service(info::languages))
+            .service(web::scope("/info").service(info::all).service(info::disk).service(info::cpu).service(info::mem).service(info::sys).service(info::language).service(info::languages).service(info::test_pressure))
     })
     .bind((url, port))?
     .workers(workers)

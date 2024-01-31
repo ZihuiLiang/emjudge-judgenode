@@ -24,4 +24,8 @@ impl TestData {
     pub fn test_size(&self) -> usize {
         self.input.iter().zip(self.output.iter()).map(|(x, y)| x.len() + y.len()).sum()
     }
+
+    pub fn max_total_time(&self) -> TimeSpan {
+        TimeSpan::from_milliseconds(self.time_limit.as_milliseconds() * self.input.len() as u64)
+    }
 }

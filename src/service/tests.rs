@@ -20,9 +20,11 @@ pub async fn only_run(settings: web::Data<Settings>, req: web::Json<TestRequest>
         TestDBRequestResult::NoSuchTest => return HttpResponse::Ok().json(OnlyRunResponse::TestDataNotFound),
         TestDBRequestResult::InternalError(error) => return HttpResponse::Ok().json(OnlyRunResponse::InternalError(error)),
     };
+    settings.add_test_pressure(test_data.max_total_time());
     let permission = settings.acquire_for_test_thread.clone().acquire_owned().await;
     let result = OnlyRun::multiple(&RawCode::new(&req.code, compile_and_exe_setting), test_data.time_limit, test_data.memory_limit, settings.tested_uid, &test_data.input, settings.output_limit).await;
     drop(permission);
+    settings.sub_test_pressure(test_data.max_total_time());
     HttpResponse::Ok().json(result.iter().map(|x| OnlyRunResponse::from(x.clone())).collect::<Vec<OnlyRunResponse>>().to_vec())
 }
 
@@ -41,9 +43,11 @@ pub async fn run_and_eval(settings: web::Data<Settings>, req: web::Json<TestRequ
         TestDBRequestResult::InternalError(error) => return HttpResponse::Ok().json(RunAndEvalResponse::InternalError(error)),
     };
     let eval_compile_and_exe_setting =  settings.compile_and_exe.get_language(&test_data.eval_or_interactor_language).unwrap();
+    settings.add_test_pressure(test_data.max_total_time());
     let permission = settings.acquire_for_test_thread.clone().acquire_owned().await;
     let result = RunAndEval::multiple(&RawCode::new(&req.code, compile_and_exe_setting), test_data.time_limit, test_data.memory_limit, settings.tested_uid, &RawCode::new(&test_data.eval_or_interactor_code, eval_compile_and_exe_setting), test_data.eval_or_interactor_time_limit, test_data.eval_or_interactor_memory_limit, settings.eval_or_interactor_uid, &test_data.input, &test_data.output, settings.output_limit).await;
     drop(permission);
+    settings.sub_test_pressure(test_data.max_total_time());
     HttpResponse::Ok().json(result.iter().map(|x| RunAndEvalResponse::from(x.clone())).collect::<Vec<RunAndEvalResponse>>().to_vec())
 }
 
@@ -56,9 +60,11 @@ pub async fn ans_and_eval(settings: web::Data<Settings>, req: web::Json<AnsReque
         TestDBRequestResult::InternalError(error) => return HttpResponse::Ok().json(AnsAndEvalResponse::InternalError(error)),
     };
     let eval_compile_and_exe_setting =  settings.compile_and_exe.get_language(&test_data.eval_or_interactor_language).unwrap();
+    settings.add_test_pressure(test_data.max_total_time());
     let permission = settings.acquire_for_test_thread.clone().acquire_owned().await;
     let result = AnsAndEval::multiple(&RawCode::new(&test_data.eval_or_interactor_code, eval_compile_and_exe_setting), test_data.eval_or_interactor_time_limit, test_data.eval_or_interactor_memory_limit, settings.eval_or_interactor_uid, &test_data.input,&test_data.output, settings.output_limit).await;
     drop(permission);
+    settings.sub_test_pressure(test_data.max_total_time());
     HttpResponse::Ok().json(result.iter().map(|x| AnsAndEvalResponse::from(x.clone())).collect::<Vec<AnsAndEvalResponse>>().to_vec())
 }
 
@@ -78,8 +84,10 @@ pub async fn run_and_interact(settings: web::Data<Settings>, req: web::Json<Test
         TestDBRequestResult::InternalError(error) => return HttpResponse::Ok().json(RunAndInteractResponse::InternalError(error)),
     };
     let interactor_compile_and_exe_setting =  settings.compile_and_exe.get_language(&test_data.eval_or_interactor_language).unwrap();
+    settings.add_test_pressure(test_data.max_total_time());
     let permission = settings.acquire_for_test_thread.clone().acquire_owned().await;
     let result = RunAndInteract::multiple(&RawCode::new(&req.code, compile_and_exe_setting), test_data.time_limit, test_data.memory_limit, settings.tested_uid, &RawCode::new(&test_data.eval_or_interactor_code, interactor_compile_and_exe_setting), test_data.eval_or_interactor_time_limit, test_data.eval_or_interactor_memory_limit, settings.eval_or_interactor_uid, &test_data.input, settings.output_limit).await;
     drop(permission);
+    settings.sub_test_pressure(test_data.max_total_time());
     HttpResponse::Ok().json(result.iter().map(|x| RunAndInteractResponse::from(x.clone())).collect::<Vec<RunAndInteractResponse>>().to_vec())
 }

@@ -1,4 +1,8 @@
-use emjudge_judgecore::{quantity::{MemorySize, ProcessResource, TimeSpan}, result::{AnsAndEvalResult, OnlyRunResult, RunAndEvalResult, RunAndInteractResult}, settings::CompileAndExeSettings};
+use emjudge_judgecore::{
+    quantity::{MemorySize, ProcessResource, TimeSpan},
+    result::{AnsAndEvalResult, OnlyRunResult, RunAndEvalResult, RunAndInteractResult},
+    settings::CompileAndExeSettings,
+};
 use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
@@ -30,15 +34,25 @@ pub enum OnlyRunResponse {
 impl From<OnlyRunResult> for OnlyRunResponse {
     fn from(result: OnlyRunResult) -> Self {
         match result {
-            OnlyRunResult::PermissionDenied => OnlyRunResponse::InternalError(String::from("Permission denied")),
+            OnlyRunResult::PermissionDenied => {
+                OnlyRunResponse::InternalError(String::from("Permission denied"))
+            }
             OnlyRunResult::InternalError(error) => OnlyRunResponse::InternalError(error),
-            OnlyRunResult::SettingError => OnlyRunResponse::InternalError(String::from("Setting error")),
+            OnlyRunResult::SettingError => {
+                OnlyRunResponse::InternalError(String::from("Setting error"))
+            }
             OnlyRunResult::Ok(resource) => OnlyRunResponse::Ok(resource),
             OnlyRunResult::CompileError(error) => OnlyRunResponse::CompileError(error),
             OnlyRunResult::RuntimeError(resource) => OnlyRunResponse::RuntimeError(resource),
-            OnlyRunResult::TimeLimitExceeded(resource) => OnlyRunResponse::TimeLimitExceeded(resource),
-            OnlyRunResult::MemoryLimitExceeded(resource) => OnlyRunResponse::MemoryLimitExceeded(resource),
-            OnlyRunResult::OutputLimitExceeded(resource) => OnlyRunResponse::OutputLimitExceeded(resource),
+            OnlyRunResult::TimeLimitExceeded(resource) => {
+                OnlyRunResponse::TimeLimitExceeded(resource)
+            }
+            OnlyRunResult::MemoryLimitExceeded(resource) => {
+                OnlyRunResponse::MemoryLimitExceeded(resource)
+            }
+            OnlyRunResult::OutputLimitExceeded(resource) => {
+                OnlyRunResponse::OutputLimitExceeded(resource)
+            }
         }
     }
 }
@@ -60,26 +74,49 @@ pub enum RunAndEvalResponse {
     MaximumCodeLimitExceeded(MemorySize),
     NoSuchLanguage,
     TestDataNotFound,
-
 }
 
 impl From<RunAndEvalResult> for RunAndEvalResponse {
     fn from(result: RunAndEvalResult) -> Self {
         match result {
-            RunAndEvalResult::PermissionDenied => RunAndEvalResponse::InternalError(String::from("Permission denied")),
+            RunAndEvalResult::PermissionDenied => {
+                RunAndEvalResponse::InternalError(String::from("Permission denied"))
+            }
             RunAndEvalResult::InternalError(error) => RunAndEvalResponse::InternalError(error),
-            RunAndEvalResult::SettingError => RunAndEvalResponse::InternalError(String::from("Setting error")),
-            RunAndEvalResult::Ok(resource, eval_resource) => RunAndEvalResponse::Ok(resource, eval_resource),
+            RunAndEvalResult::SettingError => {
+                RunAndEvalResponse::InternalError(String::from("Setting error"))
+            }
+            RunAndEvalResult::Ok(resource, eval_resource) => {
+                RunAndEvalResponse::Ok(resource, eval_resource)
+            }
             RunAndEvalResult::CompileError(error) => RunAndEvalResponse::CompileError(error),
-            RunAndEvalResult::RuntimeError(resource, eval_resource) => RunAndEvalResponse::RuntimeError(resource, eval_resource),
-            RunAndEvalResult::TimeLimitExceeded(resource, eval_resource) => RunAndEvalResponse::TimeLimitExceeded(resource, eval_resource),
-            RunAndEvalResult::MemoryLimitExceeded(resource, eval_resource) => RunAndEvalResponse::MemoryLimitExceeded(resource, eval_resource),
-            RunAndEvalResult::EvalCompileError(error) => RunAndEvalResponse::EvalCompileError(error),
-            RunAndEvalResult::EvalRuntimeError(resource, eval_resource) => RunAndEvalResponse::EvalRuntimeError(resource, eval_resource),
-            RunAndEvalResult::EvalTimeLimitExceeded(resource, eval_resource) => RunAndEvalResponse::EvalTimeLimitExceeded(resource, eval_resource),
-            RunAndEvalResult::EvalMemoryLimitExceeded(resource, eval_resource) => RunAndEvalResponse::EvalMemoryLimitExceeded(resource, eval_resource),
-            RunAndEvalResult::OutputLimitExceeded(resource, eval_resource) => RunAndEvalResponse::OutputLimitExceeded(resource, eval_resource),
-            RunAndEvalResult::EvalOutputLimitExceeded(resource, eval_resource) => RunAndEvalResponse::EvalOutputLimitExceeded(resource, eval_resource),
+            RunAndEvalResult::RuntimeError(resource, eval_resource) => {
+                RunAndEvalResponse::RuntimeError(resource, eval_resource)
+            }
+            RunAndEvalResult::TimeLimitExceeded(resource, eval_resource) => {
+                RunAndEvalResponse::TimeLimitExceeded(resource, eval_resource)
+            }
+            RunAndEvalResult::MemoryLimitExceeded(resource, eval_resource) => {
+                RunAndEvalResponse::MemoryLimitExceeded(resource, eval_resource)
+            }
+            RunAndEvalResult::EvalCompileError(error) => {
+                RunAndEvalResponse::EvalCompileError(error)
+            }
+            RunAndEvalResult::EvalRuntimeError(resource, eval_resource) => {
+                RunAndEvalResponse::EvalRuntimeError(resource, eval_resource)
+            }
+            RunAndEvalResult::EvalTimeLimitExceeded(resource, eval_resource) => {
+                RunAndEvalResponse::EvalTimeLimitExceeded(resource, eval_resource)
+            }
+            RunAndEvalResult::EvalMemoryLimitExceeded(resource, eval_resource) => {
+                RunAndEvalResponse::EvalMemoryLimitExceeded(resource, eval_resource)
+            }
+            RunAndEvalResult::OutputLimitExceeded(resource, eval_resource) => {
+                RunAndEvalResponse::OutputLimitExceeded(resource, eval_resource)
+            }
+            RunAndEvalResult::EvalOutputLimitExceeded(resource, eval_resource) => {
+                RunAndEvalResponse::EvalOutputLimitExceeded(resource, eval_resource)
+            }
         }
     }
 }
@@ -99,18 +136,31 @@ pub enum AnsAndEvalResponse {
 impl From<AnsAndEvalResult> for AnsAndEvalResponse {
     fn from(result: AnsAndEvalResult) -> Self {
         match result {
-            AnsAndEvalResult::PermissionDenied => AnsAndEvalResponse::InternalError(String::from("Permission denied")),
+            AnsAndEvalResult::PermissionDenied => {
+                AnsAndEvalResponse::InternalError(String::from("Permission denied"))
+            }
             AnsAndEvalResult::InternalError(error) => AnsAndEvalResponse::InternalError(error),
-            AnsAndEvalResult::SettingError => AnsAndEvalResponse::InternalError(String::from("Setting error")),
+            AnsAndEvalResult::SettingError => {
+                AnsAndEvalResponse::InternalError(String::from("Setting error"))
+            }
             AnsAndEvalResult::Ok(resource) => AnsAndEvalResponse::Ok(resource),
-            AnsAndEvalResult::EvalCompileError(error) => AnsAndEvalResponse::EvalCompileError(error),
-            AnsAndEvalResult::EvalRuntimeError(resource) => AnsAndEvalResponse::EvalRuntimeError(resource),
-            AnsAndEvalResult::EvalTimeLimitExceeded(resource) => AnsAndEvalResponse::EvalTimeLimitExceeded(resource),
-            AnsAndEvalResult::EvalMemoryLimitExceeded(resource) => AnsAndEvalResponse::EvalMemoryLimitExceeded(resource),
-            AnsAndEvalResult::EvalOutputLimitExceeded(resource) => AnsAndEvalResponse::EvalOutputLimitExceeded(resource),
+            AnsAndEvalResult::EvalCompileError(error) => {
+                AnsAndEvalResponse::EvalCompileError(error)
+            }
+            AnsAndEvalResult::EvalRuntimeError(resource) => {
+                AnsAndEvalResponse::EvalRuntimeError(resource)
+            }
+            AnsAndEvalResult::EvalTimeLimitExceeded(resource) => {
+                AnsAndEvalResponse::EvalTimeLimitExceeded(resource)
+            }
+            AnsAndEvalResult::EvalMemoryLimitExceeded(resource) => {
+                AnsAndEvalResponse::EvalMemoryLimitExceeded(resource)
+            }
+            AnsAndEvalResult::EvalOutputLimitExceeded(resource) => {
+                AnsAndEvalResponse::EvalOutputLimitExceeded(resource)
+            }
         }
     }
-
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
@@ -135,24 +185,51 @@ pub enum RunAndInteractResponse {
 impl From<RunAndInteractResult> for RunAndInteractResponse {
     fn from(result: RunAndInteractResult) -> Self {
         match result {
-            RunAndInteractResult::PermissionDenied => RunAndInteractResponse::InternalError(String::from("Permission denied")),
-            RunAndInteractResult::InternalError(error) => RunAndInteractResponse::InternalError(error),
-            RunAndInteractResult::SettingError => RunAndInteractResponse::InternalError(String::from("Setting error")),
-            RunAndInteractResult::Ok(resource, interactor_resource) => RunAndInteractResponse::Ok(resource, interactor_resource),
-            RunAndInteractResult::CompileError(error) => RunAndInteractResponse::CompileError(error),
-            RunAndInteractResult::RuntimeError(resource, interactor_resource) => RunAndInteractResponse::RuntimeError(resource, interactor_resource),
-            RunAndInteractResult::TimeLimitExceeded(resource, interactor_resource) => RunAndInteractResponse::TimeLimitExceeded(resource, interactor_resource),
-            RunAndInteractResult::MemoryLimitExceeded(resource, interactor_resource) => RunAndInteractResponse::MemoryLimitExceeded(resource, interactor_resource),
-            RunAndInteractResult::InteractorCompileError(error) => RunAndInteractResponse::InteractorCompileError(error),
-            RunAndInteractResult::InteractorRuntimeError(resource, interactor_resource) => RunAndInteractResponse::InteractorRuntimeError(resource, interactor_resource),
-            RunAndInteractResult::InteractorTimeLimitExceeded(resource, interactor_resource) => RunAndInteractResponse::InteractorTimeLimitExceeded(resource, interactor_resource),
-            RunAndInteractResult::InteractorMemoryLimitExceeded(resource, interactor_resource) => RunAndInteractResponse::InteractorMemoryLimitExceeded(resource, interactor_resource),
-            RunAndInteractResult::InteractorOutputLimitExceeded(resource, interactor_resource) => RunAndInteractResponse::InteractorOutputLimitExceeded(resource, interactor_resource),
-            RunAndInteractResult::OutputLimitExceeded(resource, interactor_resource) => RunAndInteractResponse::OutputLimitExceeded(resource, interactor_resource),
+            RunAndInteractResult::PermissionDenied => {
+                RunAndInteractResponse::InternalError(String::from("Permission denied"))
+            }
+            RunAndInteractResult::InternalError(error) => {
+                RunAndInteractResponse::InternalError(error)
+            }
+            RunAndInteractResult::SettingError => {
+                RunAndInteractResponse::InternalError(String::from("Setting error"))
+            }
+            RunAndInteractResult::Ok(resource, interactor_resource) => {
+                RunAndInteractResponse::Ok(resource, interactor_resource)
+            }
+            RunAndInteractResult::CompileError(error) => {
+                RunAndInteractResponse::CompileError(error)
+            }
+            RunAndInteractResult::RuntimeError(resource, interactor_resource) => {
+                RunAndInteractResponse::RuntimeError(resource, interactor_resource)
+            }
+            RunAndInteractResult::TimeLimitExceeded(resource, interactor_resource) => {
+                RunAndInteractResponse::TimeLimitExceeded(resource, interactor_resource)
+            }
+            RunAndInteractResult::MemoryLimitExceeded(resource, interactor_resource) => {
+                RunAndInteractResponse::MemoryLimitExceeded(resource, interactor_resource)
+            }
+            RunAndInteractResult::InteractorCompileError(error) => {
+                RunAndInteractResponse::InteractorCompileError(error)
+            }
+            RunAndInteractResult::InteractorRuntimeError(resource, interactor_resource) => {
+                RunAndInteractResponse::InteractorRuntimeError(resource, interactor_resource)
+            }
+            RunAndInteractResult::InteractorTimeLimitExceeded(resource, interactor_resource) => {
+                RunAndInteractResponse::InteractorTimeLimitExceeded(resource, interactor_resource)
+            }
+            RunAndInteractResult::InteractorMemoryLimitExceeded(resource, interactor_resource) => {
+                RunAndInteractResponse::InteractorMemoryLimitExceeded(resource, interactor_resource)
+            }
+            RunAndInteractResult::InteractorOutputLimitExceeded(resource, interactor_resource) => {
+                RunAndInteractResponse::InteractorOutputLimitExceeded(resource, interactor_resource)
+            }
+            RunAndInteractResult::OutputLimitExceeded(resource, interactor_resource) => {
+                RunAndInteractResponse::OutputLimitExceeded(resource, interactor_resource)
+            }
         }
     }
 }
-
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct DiskInfo {
@@ -171,7 +248,6 @@ impl DiskInfo {
             free: MemorySize::from_bytes(disk.free as usize),
         })
     }
-
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
@@ -225,7 +301,6 @@ impl MemInfo {
         })
     }
 }
-
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct SysInfo {
@@ -329,7 +404,6 @@ impl From<Result<MemInfo, String>> for MemInfoResponse {
     }
 }
 
-
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub enum AllInfoResponse {
     Ok(AllInfo),
@@ -354,7 +428,10 @@ pub struct LanguageInfo {
 }
 
 impl LanguageInfo {
-    pub fn new(language: &str, compile_and_exe_settings: &CompileAndExeSettings) -> Result<Self, String> {
+    pub fn new(
+        language: &str,
+        compile_and_exe_settings: &CompileAndExeSettings,
+    ) -> Result<Self, String> {
         match compile_and_exe_settings.get_language(language) {
             Some(compile_and_exe_setting) => Ok(Self {
                 language: language.to_string(),
@@ -395,7 +472,11 @@ pub struct LanguagesInfo {
 impl LanguagesInfo {
     pub fn new(compile_and_exe_settings: &CompileAndExeSettings) -> Self {
         Self {
-            languages: compile_and_exe_settings.languages.iter().map(|(language, _)| LanguageInfo::new(language, compile_and_exe_settings).unwrap()).collect::<Vec<LanguageInfo>>(),
+            languages: compile_and_exe_settings
+                .languages
+                .iter()
+                .map(|(language, _)| LanguageInfo::new(language, compile_and_exe_settings).unwrap())
+                .collect::<Vec<LanguageInfo>>(),
         }
     }
 }

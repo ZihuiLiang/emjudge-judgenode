@@ -1,9 +1,13 @@
 use emjudge_judgenode::settings::Settings;
-use reqwest::{header::{HeaderMap, HeaderValue}, Error};
+use reqwest::{
+    header::{HeaderMap, HeaderValue},
+    Error,
+};
 
 #[tokio::test]
 async fn is_authed() -> Result<(), Error> {
-    let settings = Settings::load_from_file("config/settings.toml", config::FileFormat::Toml).unwrap();
+    let settings =
+        Settings::load_from_file("config/settings.toml", config::FileFormat::Toml).unwrap();
     let license = settings.license;
     let mut headers = HeaderMap::new();
     let url = format!("http://{}:{}/is_authed", settings.url, settings.port);
@@ -25,7 +29,10 @@ async fn is_authed() -> Result<(), Error> {
         .unwrap();
     assert_eq!(response.status().as_u16(), 401);
     assert_eq!(response.text().await.unwrap(), "Unauthorized");
-    headers.insert("Authorization", HeaderValue::from_str(format!("Bearer {}", license).as_str()).unwrap());
+    headers.insert(
+        "Authorization",
+        HeaderValue::from_str(format!("Bearer {}", license).as_str()).unwrap(),
+    );
     let response = reqwest::Client::new()
         .get(url)
         .headers(headers.clone())

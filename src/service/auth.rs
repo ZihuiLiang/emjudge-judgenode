@@ -1,8 +1,8 @@
-use actix_web::{get, web, HttpResponse};
-use actix_web::{Error, dev::ServiceRequest, dev::ServiceResponse};
 use actix_service::{forward_ready, Service, Transform};
-use std::future::{ready, Ready};
+use actix_web::{dev::ServiceRequest, dev::ServiceResponse, Error};
+use actix_web::{get, web, HttpResponse};
 use futures::future::LocalBoxFuture;
+use std::future::{ready, Ready};
 
 use crate::settings::Settings;
 
@@ -37,15 +37,19 @@ where
 {
     type Response = ServiceResponse<B>;
     type Error = Error;
-    type Future =  LocalBoxFuture<'static, Result<Self::Response, Self::Error>>;
+    type Future = LocalBoxFuture<'static, Result<Self::Response, Self::Error>>;
 
     forward_ready!(service);
 
-    fn call(&self, req: ServiceRequest) -> Self::Future
-    {   
+    fn call(&self, req: ServiceRequest) -> Self::Future {
         if let Some(auth) = req.headers().get("Authorization") {
             if let Ok(auth) = auth.to_str() {
-                if auth == format!("Bearer {}", req.app_data::<web::Data<Settings>>().unwrap().license) {
+                if auth
+                    == format!(
+                        "Bearer {}",
+                        req.app_data::<web::Data<Settings>>().unwrap().license
+                    )
+                {
                     let fut = self.service.call(req);
                     return Box::pin(async move {
                         let res = fut.await?;
@@ -54,9 +58,7 @@ where
                 }
             }
         }
-        Box::pin(async move {
-            Err(actix_web::error::ErrorUnauthorized("Unauthorized"))
-        })
+        Box::pin(async move { Err(actix_web::error::ErrorUnauthorized("Unauthorized")) })
     }
 }
 #[get("/is_authed")]

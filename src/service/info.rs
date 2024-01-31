@@ -1,8 +1,14 @@
 use actix_web::{get, post, web, HttpResponse};
 
-use crate::{requests::LanguageRequest, responses::{AllInfo, AllInfoResponse, CpuInfo, CpuInfoResponse, DiskInfo, DiskInfoResponse, LanguageInfo, LanguageInfoResponse, LanguagesInfo, LanguagesInfoResponse, MemInfo, MemInfoResponse, SysInfo, SysInfoResponse, TestPressureResponse}, settings::Settings};
-
-
+use crate::{
+    requests::LanguageRequest,
+    responses::{
+        AllInfo, AllInfoResponse, CpuInfo, CpuInfoResponse, DiskInfo, DiskInfoResponse,
+        LanguageInfo, LanguageInfoResponse, LanguagesInfo, LanguagesInfoResponse, MemInfo,
+        MemInfoResponse, SysInfo, SysInfoResponse, TestPressureResponse,
+    },
+    settings::Settings,
+};
 
 #[get("/sys")]
 pub async fn sys() -> HttpResponse {
@@ -15,7 +21,6 @@ pub async fn all() -> HttpResponse {
     let all_info_response = AllInfoResponse::from(AllInfo::new());
     HttpResponse::Ok().json(all_info_response)
 }
-
 
 #[get("/cpu")]
 pub async fn cpu() -> HttpResponse {
@@ -37,13 +42,18 @@ pub async fn disk() -> HttpResponse {
 
 #[get("/languages")]
 pub async fn languages(settings: web::Data<Settings>) -> HttpResponse {
-    let languages_info_response = LanguagesInfoResponse::from(LanguagesInfo::new(&settings.compile_and_exe));
+    let languages_info_response =
+        LanguagesInfoResponse::from(LanguagesInfo::new(&settings.compile_and_exe));
     HttpResponse::Ok().json(languages_info_response)
 }
 
 #[post("/language")]
-pub async fn language(settings: web::Data<Settings>, req: web::Json<LanguageRequest>) -> HttpResponse {
-    let language_info_response = LanguageInfoResponse::from(LanguageInfo::new(&req.language, &settings.compile_and_exe));
+pub async fn language(
+    settings: web::Data<Settings>,
+    req: web::Json<LanguageRequest>,
+) -> HttpResponse {
+    let language_info_response =
+        LanguageInfoResponse::from(LanguageInfo::new(&req.language, &settings.compile_and_exe));
     HttpResponse::Ok().json(language_info_response)
 }
 

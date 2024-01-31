@@ -18,11 +18,25 @@ pub struct TestData {
 
 impl TestData {
     pub fn calculate_db_storage_size(&self) -> usize {
-        self.id.len() + size_of_val(&self.time_limit) + size_of_val(&self.memory_limit) + size_of_val(&self.eval_or_interactor_time_limit) + size_of_val(&self.eval_or_interactor_memory_limit) + self.input.len() * 8 + self.input.iter().map(|x| x.len()).sum::<usize>() + self.output.len() * 8 + self.output.iter().map(|x| x.len()).sum::<usize>() + self.eval_or_interactor_code.len() + self.eval_or_interactor_language.len()
+        self.id.len()
+            + size_of_val(&self.time_limit)
+            + size_of_val(&self.memory_limit)
+            + size_of_val(&self.eval_or_interactor_time_limit)
+            + size_of_val(&self.eval_or_interactor_memory_limit)
+            + self.input.len() * 8
+            + self.input.iter().map(|x| x.len()).sum::<usize>()
+            + self.output.len() * 8
+            + self.output.iter().map(|x| x.len()).sum::<usize>()
+            + self.eval_or_interactor_code.len()
+            + self.eval_or_interactor_language.len()
     }
 
     pub fn test_size(&self) -> usize {
-        self.input.iter().zip(self.output.iter()).map(|(x, y)| x.len() + y.len()).sum()
+        self.input
+            .iter()
+            .zip(self.output.iter())
+            .map(|(x, y)| x.len() + y.len())
+            .sum()
     }
 
     pub fn max_total_time(&self) -> TimeSpan {

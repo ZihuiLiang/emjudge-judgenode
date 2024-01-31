@@ -21,7 +21,8 @@ impl TestDB {
             Ok(db) => db,
             Err(error) => return Err(error.to_string()),
         };
-        match db.execute("CREATE TABLE IF NOT EXISTS test (
+        match db.execute(
+            "CREATE TABLE IF NOT EXISTS test (
             id TEXT PRIMARY KEY,
             time_limit_ms INTEGER,
             memory_limit_bytes INTEGER,
@@ -32,15 +33,13 @@ impl TestDB {
             eval_or_interactor_code BLOB,
             eval_or_interactor_language TEXT,
             update_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-        )", []) {
+        )",
+            [],
+        ) {
             Ok(_) => (),
             Err(error) => return Err(error.to_string()),
         };
-        Ok(
-        Self {
-            path,
-            max_db_limit,
-        })
+        Ok(Self { path, max_db_limit })
     }
     pub fn request(&self, test_uuid: &String) -> TestDBRequestResult {
         let db = match rusqlite::Connection::open(&self.path) {
@@ -72,13 +71,25 @@ impl TestDB {
             Err(error) => return Err(error.to_string()),
         };
         let new_data_size = test_data.calculate_db_storage_size();
-        let mut page_count: usize = db.query_row("PRAGMA page_count", [], |row| row.get(0)).unwrap();
-        let mut page_size: usize = db.query_row("PRAGMA page_size", [], |row| row.get(0)).unwrap();
+        let mut page_count: usize = db
+            .query_row("PRAGMA page_count", [], |row| row.get(0))
+            .unwrap();
+        let mut page_size: usize = db
+            .query_row("PRAGMA page_size", [], |row| row.get(0))
+            .unwrap();
         let mut db_size: usize = page_count * page_size;
         while new_data_size + db_size > self.max_db_limit.as_bytes() {
-            db.execute("DELETE FROM test WHERE update_time = (SELECT MIN(update_time) FROM test)", []).unwrap();
-            page_count = db.query_row("PRAGMA page_count", [], |row| row.get(0)).unwrap();
-            page_size = db.query_row("PRAGMA page_size", [], |row| row.get(0)).unwrap();
+            db.execute(
+                "DELETE FROM test WHERE update_time = (SELECT MIN(update_time) FROM test)",
+                [],
+            )
+            .unwrap();
+            page_count = db
+                .query_row("PRAGMA page_count", [], |row| row.get(0))
+                .unwrap();
+            page_size = db
+                .query_row("PRAGMA page_size", [], |row| row.get(0))
+                .unwrap();
             db_size = page_count * page_size;
         }
         db.execute("INSERT INTO test (id, time_limit_ms, memory_limit_bytes, eval_or_interactor_time_limit_ms, eval_or_interactor_memory_limit_bytes, input, output, eval_or_interactor_code, eval_or_interactor_language) VALUES (:id, :time_limit_ms, :memory_limit_bytes, :eval_or_interactor_time_limit_ms, :eval_or_interactor_memory_limit_bytes, :input, :output, :eval_or_interactor_code, :eval_or_interactor_language) ON CONFLICT (id) DO UPDATE SET time_limit_ms = :time_limit_ms, memory_limit_bytes = :memory_limit_bytes, eval_or_interactor_time_limit_ms = :eval_or_interactor_time_limit_ms, eval_or_interactor_memory_limit_bytes = :eval_or_interactor_memory_limit_bytes, input = :input, output = :output, eval_or_interactor_code = :eval_or_interactor_code, eval_or_interactor_language = :eval_or_interactor_language",
@@ -101,7 +112,16 @@ fn extract(data: &Vec<u8>) -> Vec<Vec<u8>> {
     let mut result = Vec::new();
     let mut i = 0;
     while i < data.len() {
-        let len = u64::from_le_bytes([data[i], data[i + 1], data[i + 2], data[i + 3], data[i + 4], data[i + 5], data[i + 6], data[i + 7]]) as usize;
+        let len = u64::from_le_bytes([
+            data[i],
+            data[i + 1],
+            data[i + 2],
+            data[i + 3],
+            data[i + 4],
+            data[i + 5],
+            data[i + 6],
+            data[i + 7],
+        ]) as usize;
         i += 8;
         result.push(data[i..i + len].to_vec());
         i += len;

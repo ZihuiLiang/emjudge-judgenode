@@ -1,7 +1,10 @@
 use std::sync::{Arc, RwLock};
 
 use config::Config;
-use emjudge_judgecore::{quantity::{MemorySize, TimeSpan}, settings::{create_a_tmp_user_return_uid, CompileAndExeSettings}};
+use emjudge_judgecore::{
+    quantity::{MemorySize, TimeSpan},
+    settings::{create_a_tmp_user_return_uid, CompileAndExeSettings},
+};
 use serde::{Deserialize, Serialize};
 use serde_with::serde_as;
 use tokio::sync::Semaphore;
@@ -18,9 +21,9 @@ pub struct Settings {
     #[serde(default = "Settings::test_threads_default")]
     pub test_threads: usize,
     #[serde(default = "Settings::actix_workers_default")]
-    pub actix_workers: usize, 
+    pub actix_workers: usize,
     #[serde(default = "Settings::max_json_limit_default")]
-    pub max_json_limit : MemorySize,
+    pub max_json_limit: MemorySize,
     #[serde(default = "Settings::max_time_limit_default")]
     pub max_time_limit: TimeSpan,
     #[serde(default = "Settings::max_memory_limit_default")]
@@ -52,7 +55,7 @@ pub struct Settings {
     #[serde(skip, default = "Settings::test_db_default")]
     pub test_db: TestDB,
     #[serde(skip, default = "Settings::test_pressure_default")]
-    test_pressure: Arc<RwLock<TimeSpan>>
+    test_pressure: Arc<RwLock<TimeSpan>>,
 }
 
 impl Settings {
@@ -114,7 +117,10 @@ impl Settings {
         String::from("db.sqlite3")
     }
     fn test_db_default() -> TestDB {
-        TestDB {path: Self::test_data_db_path_default(), max_db_limit: Self::max_db_limit_default()}
+        TestDB {
+            path: Self::test_data_db_path_default(),
+            max_db_limit: Self::max_db_limit_default(),
+        }
     }
     fn test_pressure_default() -> Arc<RwLock<TimeSpan>> {
         Arc::new(RwLock::new(TimeSpan::from_seconds(0)))
@@ -130,11 +136,14 @@ impl Settings {
             Ok(config) => match config.try_deserialize::<Self>() {
                 Ok(mut result) => {
                     result.acquire_for_test_thread = Arc::new(Semaphore::new(result.test_threads));
-                    result.test_db = TestDB::new(result.test_data_db_path.clone(), result.max_db_limit).unwrap();
-                    result.tested_uid = create_a_tmp_user_return_uid(&result.tested_user_name).unwrap();
-                    result.eval_or_interactor_uid = create_a_tmp_user_return_uid(&result.eval_or_interactor_user_name).unwrap();
+                    result.test_db =
+                        TestDB::new(result.test_data_db_path.clone(), result.max_db_limit).unwrap();
+                    result.tested_uid =
+                        create_a_tmp_user_return_uid(&result.tested_user_name).unwrap();
+                    result.eval_or_interactor_uid =
+                        create_a_tmp_user_return_uid(&result.eval_or_interactor_user_name).unwrap();
                     Ok(result)
-                },
+                }
                 Err(result) => Err(result.to_string()),
             },
             Err(result) => Err(result.to_string()),

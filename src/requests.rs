@@ -13,7 +13,6 @@ pub struct AnsRequest {
     pub test_uuid: String,
 }
 
-
 #[derive(Deserialize, Serialize, Debug)]
 pub struct LanguageRequest {
     pub language: String,

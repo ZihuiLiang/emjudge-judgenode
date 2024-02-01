@@ -135,6 +135,8 @@ COPY config config
 COPY src src
 COPY Cargo.toml Cargo.toml
 
-RUN cargo build --release --features "full"
+RUN cargo build --release --features "full_v2"
+
+CMD ["bash"]
 
 CMD ["target/release/emjudge-judgenode"]

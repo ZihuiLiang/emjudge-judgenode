@@ -124,7 +124,7 @@ RUN apt install -y --no-install-recommends julia
 
 RUN julia --version
 
-RUN apt install -y --no-install-recommends libcgroup-dev pkg-config libsqlite3-dev
+RUN apt install -y --no-install-recommends pkg-config libsqlite3-dev
 
 RUN apt clean \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*

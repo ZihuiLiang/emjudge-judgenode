@@ -162,6 +162,6 @@ impl Settings {
 
     pub fn get_test_pressure(&self) -> TimeSpan {
         let test_pressure = self.test_pressure.read().unwrap();
-        *test_pressure
+        TimeSpan::from_milliseconds(test_pressure.as_milliseconds() / self.test_threads as u64)
     }
 }

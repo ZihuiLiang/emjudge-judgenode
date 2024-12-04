@@ -4,7 +4,6 @@ use reqwest::{
     header::{HeaderMap, HeaderValue},
     Error,
 };
-
 #[tokio::test]
 async fn test_data_submit() -> Result<(), Error> {
     let settings =
